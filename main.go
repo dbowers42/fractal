@@ -1,6 +1,6 @@
 package main
 
-import "fractal/lib"
+import "github.com/dbowers42/fractal/lib"
 
 func main() {
 	size := 81
