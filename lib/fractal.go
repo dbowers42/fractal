@@ -1,6 +1,9 @@
 package lib
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 type Fractal struct {
 	Size  int
@@ -46,8 +49,7 @@ func (f *Fractal) Compute(row1, col1, row2, col2 int) {
 		c2 := col1 + 2*chunk
 		f.Fill(r1, c1, r2, c2, true)
 
-		//f.Compute(row1, col1, row1+chunk, col1+chunk)
-		//f.Compute(row1, c1, r1, c2)
+
 		f.Compute(row1, col1, r1, c1)
 		f.Compute(row1, c1, r1, c2)
 		f.Compute(row1, c2, r1, col2)
@@ -59,15 +61,24 @@ func (f *Fractal) Compute(row1, col1, row2, col2 int) {
 	}
 }
 
-func (f *Fractal) Display() {
+
+func (f *Fractal) Render(filePath string) {
+	file, err := os.Create(filePath)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer file.Close()
+
 	for row := 0; row < f.Size; row++ {
 		for col := 0; col < f.Size; col++ {
 			if f.cells[row][col] {
-				fmt.Print("#")
+				fmt.Fprintf(file, "#")
 			} else {
-				fmt.Print(" ")
+				fmt.Fprint(file, " ")
 			}
 		}
-		fmt.Println()
+		fmt.Fprintln(file)
 	}
 }
